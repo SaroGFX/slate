@@ -35,7 +35,7 @@ module.exports = merge([
     module: {
       rules: [
         {
-          test: /^(?:(?!(css|scss|sass)).)*\.(liquid)$/,
+          test: ['scripts-tags.liquid', 'style-tags.liquid'],
           exclude: config.get('webpack.commonExcludes'),
           use: [
             {loader: 'extract-loader'},

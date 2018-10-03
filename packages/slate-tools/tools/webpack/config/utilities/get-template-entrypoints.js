@@ -35,33 +35,52 @@ function isValidTemplate(filename) {
 module.exports = function() {
   const entrypoints = {};
 
-  fs.readdirSync(config.get('paths.theme.src.templates')).forEach((file) => {
-    const name = path.parse(file).name;
-    const jsFile = path.join(
-      config.get('paths.theme.src.scripts'),
-      'templates',
-      `${name}.js`,
-    );
+  const templatesPath = config.get('paths.theme.src.templates');
 
-    if (isValidTemplate(name) && fs.existsSync(jsFile)) {
-      entrypoints[`template.${name}`] = jsFile;
+  fs.readdirSync(templatesPath, {withFileTypes: true}).forEach((file) => {
+    let namedFile;
+
+    if (
+      fs.statSync(path.join(templatesPath, file)).isDirectory() &&
+      file !== 'customers'
+    ) {
+      namedFile = path.join(templatesPath, file, `index.js`);
+    } else {
+      namedFile = path.join(templatesPath, `${file}.js`);
+    }
+
+    if (isValidTemplate(file) && fs.existsSync(namedFile)) {
+      entrypoints[`template.${file}`] = namedFile;
     }
   });
 
-  fs
-    .readdirSync(config.get('paths.theme.src.templates.customers'))
-    .forEach((file) => {
-      const name = `${path.parse(file).name}`;
-      const jsFile = path.join(
-        config.get('paths.theme.src.scripts'),
-        'templates',
-        'customers',
-        `${name}.js`,
-      );
-      if (VALID_LIQUID_TEMPLATES.includes(name) && fs.existsSync(jsFile)) {
-        entrypoints[`template.${name}`] = jsFile;
-      }
-    });
+  // fs.readdirSync(config.get('paths.theme.src.templates')).forEach((file) => {
+  //   const name = path.parse(file).name;
+  //   const jsFile = path.join(
+  //     config.get('paths.theme.src.scripts'),
+  //     'templates',
+  //     `${name}.js`,
+  //   );
+
+  //   if (isValidTemplate(name) && fs.existsSync(jsFile)) {
+  //     entrypoints[`template.${name}`] = jsFile;
+  //   }
+  // });
+
+  // fs
+  //   .readdirSync(config.get('paths.theme.src.templates.customers'))
+  //   .forEach((file) => {
+  //     const name = `${path.parse(file).name}`;
+  //     const jsFile = path.join(
+  //       config.get('paths.theme.src.scripts'),
+  //       'templates',
+  //       'customers',
+  //       `${name}.js`,
+  //     );
+  //     if (VALID_LIQUID_TEMPLATES.includes(name) && fs.existsSync(jsFile)) {
+  //       entrypoints[`template.${name}`] = jsFile;
+  //     }
+  //   });
 
   return entrypoints;
 };

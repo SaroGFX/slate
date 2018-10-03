@@ -1,14 +1,65 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SlateConfig = require('@shopify/slate-config');
 const config = new SlateConfig(require('../../../../slate-tools.schema'));
 
 const isDevelopment = process.env.NODE_ENV === 'development';
+
+function recursiveIssuer(m) {
+  if (m.issuer) {
+    return recursiveIssuer(m.issuer);
+  } else if (m.name) {
+    return m.name;
+  } else {
+    return false;
+  }
+}
 
 const part = {
   module: {
     rules: [],
   },
   plugins: [],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        'template.search': {
+          name: 'template.search',
+          test: (m, c, entry = 'template.search') =>
+            m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+          chunks: 'all',
+          enforce: true,
+        },
+        'template.product': {
+          name: 'template.product',
+          test: (m, c, entry = 'template.product') =>
+            m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+          chunks: 'all',
+          enforce: true,
+        },
+        'template.password': {
+          name: 'template.password',
+          test: (m, c, entry = 'template.password') =>
+            m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+          chunks: 'all',
+          enforce: true,
+        },
+        'template.page': {
+          name: 'template.page',
+          test: (m, c, entry = 'template.page') =>
+            m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+          chunks: 'all',
+          enforce: true,
+        },
+        'template.list-collections': {
+          name: 'template.list-collections',
+          test: (m, c, entry = 'template.list-collections') =>
+            m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
 };
 
 const sassRule = {
@@ -47,21 +98,23 @@ const sassLoader = {
   options: {sourceMap: config.get('webpack.sourceMap.styles')},
 };
 
-const extractStyles = new ExtractTextPlugin({
-  filename: '[name].css.liquid',
-  allChunks: true,
-});
-
 if (isDevelopment) {
   sassRule.use = [styleLoader, cssLoader, postcssLoader, sassLoader];
   part.module.rules.push(sassRule);
 } else {
-  sassRule.use = extractStyles.extract({
-    fallback: styleLoader,
-    use: [cssVarLoader, cssLoader, postcssLoader, sassLoader],
-  });
+  sassRule.use = [
+    MiniCssExtractPlugin.loader,
+    cssLoader,
+    postcssLoader,
+    sassLoader,
+  ];
   part.module.rules.push(sassRule);
-  part.plugins.push(extractStyles);
+  part.plugins.push(
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+  );
 }
 
 module.exports = part;

@@ -6,8 +6,7 @@ const config = new SlateConfig(require('../../../../slate-tools.schema'));
 module.exports = {
   entry: Object.assign(
     {},
-    getLayoutEntrypoints(),
     getTemplateEntrypoints(),
-    config.get('webpack.entrypoints'),
+    // config.get('webpack.entrypoints'),
   ),
 };

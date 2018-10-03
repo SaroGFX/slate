@@ -24,7 +24,7 @@ const config = new SlateConfig(require('../../../slate-tools.schema'));
 module.exports = merge([
   core,
   entry,
-  babel,
+  // babel,
   sass,
   {
     mode: 'production',
@@ -102,7 +102,7 @@ module.exports = merge([
 
       new SlateLiquidAssetsPlugin(),
 
-      new SlateTagPlugin(packageJson.version),
+      // new SlateTagPlugin(packageJson.version),
     ],
 
     optimization: {

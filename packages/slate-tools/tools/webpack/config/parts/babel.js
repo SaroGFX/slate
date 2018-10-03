@@ -8,11 +8,16 @@ const part = {module: {rules: []}};
 const babelLoader = {
   test: /\.js$/,
   exclude: config.get('webpack.babel.exclude'),
-  loader: 'babel-loader',
-  options: {
-    babelrc: false,
-    extends: config.get('webpack.babel.configPath'),
-  },
+  use: [
+    {loader: 'file-loader'},
+    {
+      loader: 'babel-loader',
+      options: {
+        babelrc: false,
+        extends: config.get('webpack.babel.configPath'),
+      },
+    },
+  ],
 };
 
 if (

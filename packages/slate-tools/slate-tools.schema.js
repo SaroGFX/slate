@@ -110,6 +110,6 @@ module.exports = {
 
   // Object which contains entrypoints used in webpack's config.entry key
   'webpack.entrypoints': {
-    static: path.resolve(__dirname, 'tools/webpack/static-files-glob.js'),
+    // static: path.resolve(__dirname, 'tools/webpack/static-files-glob.js'),
   },
 };

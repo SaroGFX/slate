@@ -15,6 +15,10 @@ module.exports = {
   // Source directory of theme
   'paths.theme.src': (config) => path.join(config.get('paths.theme'), 'src'),
 
+  // Source directory of theme
+  'paths.theme.src.assets': (config) =>
+    path.join(config.get('paths.theme.src'), 'assets'),
+
   // Source of theme configuration files
   'paths.theme.src.config': (config) =>
     path.join(config.get('paths.theme.src'), 'config'),
@@ -38,6 +42,10 @@ module.exports = {
   // Source scripts directory for theme
   'paths.theme.src.scripts': (config) =>
     path.join(config.get('paths.theme.src'), 'assets', 'scripts'),
+
+  // Source scripts directory for theme
+  'paths.theme.src.sections': (config) =>
+    path.join(config.get('paths.theme.src'), 'sections'),
 
   // Source snippets directory
   'paths.theme.src.snippets': (config) =>
@@ -71,12 +79,20 @@ module.exports = {
     path.join(config.get('paths.theme.dist'), 'config'),
 
   // Distribution snippets directory
+  'paths.theme.dist.layouts': (config) =>
+    path.join(config.get('paths.theme.dist'), 'locales'),
+
+  // Distribution locales directory
+  'paths.theme.dist.locales': (config) =>
+    path.join(config.get('paths.theme.dist'), 'locales'),
+
+  // Distribution snippets directory
   'paths.theme.dist.snippets': (config) =>
     path.join(config.get('paths.theme.dist'), 'snippets'),
 
-  // Distribution snippets directory
-  'paths.theme.dist.locales': (config) =>
-    path.join(config.get('paths.theme.dist'), 'locales'),
+  // Distribution liquid template directory
+  'paths.theme.dist.templates': (config) =>
+    path.join(config.get('paths.theme.dist'), 'templates'),
 
   // Directory for storing all temporary and/or cache files
   'paths.theme.cache': (config) =>
